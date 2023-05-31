@@ -1,0 +1,822 @@
+                              MYSQL 
+                                                        PART 3
+
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 36
+Server version: 8.0.33 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| classicmodels      |
+| information_schema |
+| lco_films          |
+| movies_db_pw       |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql> use lco_films;
+Database changed
+mysql> show tables;
++---------------------+
+| Tables_in_lco_films |
++---------------------+
+| actor               |
+| address             |
+| category            |
+| city                |
+| country             |
+| film                |
+| film_actor          |
+| film_category       |
+| language            |
++---------------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from actors limit 10;
+ERROR 1146 (42S02): Table 'lco_films.actors' doesn't exist
+mysql> select * from actor limit 10;
++----------+------------+--------------+------------+---------------------+
+| actor_id | first_name | last_name    | address_id | last_update         |
++----------+------------+--------------+------------+---------------------+
+|        1 | PENELOPE   | GUINESS      |          1 | 2020-07-30 18:07:51 |
+|        2 | NICK       | WAHLBERG     |          4 | 2020-07-30 18:07:51 |
+|        3 | ED         | CHASE        |          2 | 2020-07-30 18:07:51 |
+|        4 | JENNIFER   | DAVIS        |          3 | 2020-07-30 18:07:51 |
+|        5 | JOHNNY     | LOLLOBRIGIDA |          5 | 2020-07-30 18:07:51 |
+|        6 | BETTE      | NICHOLSON    |          7 | 2020-07-30 18:07:51 |
+|        7 | GRACE      | MOSTEL       |          6 | 2020-07-30 18:07:51 |
+|        8 | MATTHEW    | JOHANSSON    |          8 | 2020-07-30 18:07:51 |
+|        9 | JOE        | SWANK        |         10 | 2020-07-30 18:07:51 |
+|       10 | CHRISTIAN  | GABLE        |          9 | 2020-07-30 18:07:51 |
++----------+------------+--------------+------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from  address limit 10;
++------------+---------------------------------+----------+------------+---------+-------------+--------------+---------------------+
+| address_id | address                         | address2 | district   | city_id | postal_code | phone        | last_update         |
++------------+---------------------------------+----------+------------+---------+-------------+--------------+---------------------+
+|          1 | 47 MySakila Drive               | NULL     | Alberta    |     300 |             |              | 2020-07-30 18:07:51 |
+|          2 | 28 MySQL Boulevard              | NULL     | QLD        |     576 |             |              | 2020-07-30 18:07:51 |
+|          3 | 23 Workhaven Lane               | NULL     | Alberta    |     300 |             | 14033335568  | 2020-07-30 18:07:51 |
+|          4 | 1411 Lillydale Drive            | NULL     | QLD        |     576 |             | 6172235589   | 2020-07-30 18:07:51 |
+|          5 | 1913 Hanoi Way                  |          | Nagasaki   |     463 | 35200       | 28303384290  | 2020-07-30 18:07:51 |
+|          6 | 1121 Loja Avenue                |          | California |     449 | 17886       | 838635286649 | 2020-07-30 18:07:51 |
+|          7 | 692 Joliet Street               |          | Attika     |      38 | 83579       | 448477190408 | 2020-07-30 18:07:51 |
+|          8 | 1566 Inegl Manor                |          | Mandalay   |     349 | 53561       | 705814003527 | 2020-07-30 18:07:51 |
+|          9 | 53 Idfu Parkway                 |          | Nantou     |     361 | 42399       | 10655648674  | 2020-07-30 18:07:51 |
+|         10 | 1795 Santiago de Compostela Way |          | Texas      |     295 | 18743       | 860452626434 | 2020-07-30 18:07:51 |
++------------+---------------------------------+----------+------------+---------+-------------+--------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> select  first_name ,  last_name , address from actor JOIN address ON actor.address_id = address.address_id LIMIT 10;
++------------+--------------+---------------------------------+
+| first_name | last_name    | address                         |
++------------+--------------+---------------------------------+
+| PENELOPE   | GUINESS      | 47 MySakila Drive               |
+| NICK       | WAHLBERG     | 1411 Lillydale Drive            |
+| ED         | CHASE        | 28 MySQL Boulevard              |
+| JENNIFER   | DAVIS        | 23 Workhaven Lane               |
+| JOHNNY     | LOLLOBRIGIDA | 1913 Hanoi Way                  |
+| BETTE      | NICHOLSON    | 692 Joliet Street               |
+| GRACE      | MOSTEL       | 1121 Loja Avenue                |
+| MATTHEW    | JOHANSSON    | 1566 Inegl Manor                |
+| JOE        | SWANK        | 1795 Santiago de Compostela Way |
+| CHRISTIAN  | GABLE        | 53 Idfu Parkway                 |
++------------+--------------+---------------------------------+
+10 rows in set (0.00 sec)
+
+mysql> select  first_name ,  last_name , address , district , last_update from actor JOIN address ON actor.address_id = address.address_id LIMIT 10;
+ERROR 1052 (23000): Column 'last_update' in field list is ambiguous
+mysql> select  first_name ,  last_name , address , district , phone from actor JOIN address ON actor.address_id = address.address_id LIMIT 10;
++------------+--------------+---------------------------------+------------+--------------+
+| first_name | last_name    | address                         | district   | phone        |
++------------+--------------+---------------------------------+------------+--------------+
+| PENELOPE   | GUINESS      | 47 MySakila Drive               | Alberta    |              |
+| NICK       | WAHLBERG     | 1411 Lillydale Drive            | QLD        | 6172235589   |
+| ED         | CHASE        | 28 MySQL Boulevard              | QLD        |              |
+| JENNIFER   | DAVIS        | 23 Workhaven Lane               | Alberta    | 14033335568  |
+| JOHNNY     | LOLLOBRIGIDA | 1913 Hanoi Way                  | Nagasaki   | 28303384290  |
+| BETTE      | NICHOLSON    | 692 Joliet Street               | Attika     | 448477190408 |
+| GRACE      | MOSTEL       | 1121 Loja Avenue                | California | 838635286649 |
+| MATTHEW    | JOHANSSON    | 1566 Inegl Manor                | Mandalay   | 705814003527 |
+| JOE        | SWANK        | 1795 Santiago de Compostela Way | Texas      | 860452626434 |
+| CHRISTIAN  | GABLE        | 53 Idfu Parkway                 | Nantou     | 10655648674  |
++------------+--------------+---------------------------------+------------+--------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from  city limit 10;
++---------+--------------------+------------+---------------------+
+| city_id | city               | country_id | last_update         |
++---------+--------------------+------------+---------------------+
+|       1 | A Corua (La Corua) |         87 | 2020-07-30 18:07:52 |
+|       2 | Abha               |         82 | 2020-07-30 18:07:52 |
+|       3 | Abu Dhabi          |        101 | 2020-07-30 18:07:52 |
+|       4 | Acua               |         60 | 2020-07-30 18:07:52 |
+|       5 | Adana              |         97 | 2020-07-30 18:07:52 |
+|       6 | Addis Abeba        |         31 | 2020-07-30 18:07:52 |
+|       7 | Aden               |        107 | 2020-07-30 18:07:52 |
+|       8 | Adoni              |         44 | 2020-07-30 18:07:52 |
+|       9 | Ahmadnagar         |         44 | 2020-07-30 18:07:52 |
+|      10 | Akishima           |         50 | 2020-07-30 18:07:52 |
++---------+--------------------+------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> select  first_name ,  last_name , address ,city , district , phone from actor JOIN address ON actor.address_id = address.address_id JOIN city ON address.city_id = city.city_id LIMIT 10;
++------------+--------------+---------------------------------+----------------+------------+--------------+
+| first_name | last_name    | address                         | city           | district   | phone        |
++------------+--------------+---------------------------------+----------------+------------+--------------+
+| PENELOPE   | GUINESS      | 47 MySakila Drive               | Lethbridge     | Alberta    |              |
+| NICK       | WAHLBERG     | 1411 Lillydale Drive            | Woodridge      | QLD        | 6172235589   |
+| ED         | CHASE        | 28 MySQL Boulevard              | Woodridge      | QLD        |              |
+| JENNIFER   | DAVIS        | 23 Workhaven Lane               | Lethbridge     | Alberta    | 14033335568  |
+| JOHNNY     | LOLLOBRIGIDA | 1913 Hanoi Way                  | Sasebo         | Nagasaki   | 28303384290  |
+| BETTE      | NICHOLSON    | 692 Joliet Street               | Athenai        | Attika     | 448477190408 |
+| GRACE      | MOSTEL       | 1121 Loja Avenue                | San Bernardino | California | 838635286649 |
+| MATTHEW    | JOHANSSON    | 1566 Inegl Manor                | Myingyan       | Mandalay   | 705814003527 |
+| JOE        | SWANK        | 1795 Santiago de Compostela Way | Laredo         | Texas      | 860452626434 |
+| CHRISTIAN  | GABLE        | 53 Idfu Parkway                 | Nantou         | Nantou     | 10655648674  |
++------------+--------------+---------------------------------+----------------+------------+--------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from COUNTRY  limit 10;
++------------+----------------+---------------------+
+| country_id | country        | last_update         |
++------------+----------------+---------------------+
+|          1 | Afghanistan    | 2020-07-30 18:07:53 |
+|          2 | Algeria        | 2020-07-30 18:07:53 |
+|          3 | American Samoa | 2020-07-30 18:07:53 |
+|          4 | Angola         | 2020-07-30 18:07:53 |
+|          5 | Anguilla       | 2020-07-30 18:07:53 |
+|          6 | Argentina      | 2020-07-30 18:07:53 |
+|          7 | Armenia        | 2020-07-30 18:07:53 |
+|          8 | Australia      | 2020-07-30 18:07:53 |
+|          9 | Austria        | 2020-07-30 18:07:53 |
+|         10 | Azerbaijan     | 2020-07-30 18:07:53 |
++------------+----------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> select  first_name ,  last_name , address ,city , district , country , phone from actor JOIN address ON actor.address_id = address.address_id JOIN city ON address.city_id = city.city_id JOIN country ON city.country_id = country.country_id LIMIT 10;
++------------+--------------+---------------------------------+----------------+------------+---------------+--------------+
+| first_name | last_name    | address                         | city           | district   | country       | phone        |
++------------+--------------+---------------------------------+----------------+------------+---------------+--------------+
+| PENELOPE   | GUINESS      | 47 MySakila Drive               | Lethbridge     | Alberta    | Canada        |              |
+| NICK       | WAHLBERG     | 1411 Lillydale Drive            | Woodridge      | QLD        | Australia     | 6172235589   |
+| ED         | CHASE        | 28 MySQL Boulevard              | Woodridge      | QLD        | Australia     |              |
+| JENNIFER   | DAVIS        | 23 Workhaven Lane               | Lethbridge     | Alberta    | Canada        | 14033335568  |
+| JOHNNY     | LOLLOBRIGIDA | 1913 Hanoi Way                  | Sasebo         | Nagasaki   | Japan         | 28303384290  |
+| BETTE      | NICHOLSON    | 692 Joliet Street               | Athenai        | Attika     | Greece        | 448477190408 |
+| GRACE      | MOSTEL       | 1121 Loja Avenue                | San Bernardino | California | United States | 838635286649 |
+| MATTHEW    | JOHANSSON    | 1566 Inegl Manor                | Myingyan       | Mandalay   | Myanmar       | 705814003527 |
+| JOE        | SWANK        | 1795 Santiago de Compostela Way | Laredo         | Texas      | United States | 860452626434 |
+| CHRISTIAN  | GABLE        | 53 Idfu Parkway                 | Nantou         | Nantou     | Taiwan        | 10655648674  |
++------------+--------------+---------------------------------+----------------+------------+---------------+--------------+
+10 rows in set (0.00 sec)
+
+mysql> select * from actor;
++----------+-------------+--------------+------------+---------------------+
+| actor_id | first_name  | last_name    | address_id | last_update         |
++----------+-------------+--------------+------------+---------------------+
+|        1 | PENELOPE    | GUINESS      |          1 | 2020-07-30 18:07:51 |
+|        2 | NICK        | WAHLBERG     |          4 | 2020-07-30 18:07:51 |
+|        3 | ED          | CHASE        |          2 | 2020-07-30 18:07:51 |
+|        4 | JENNIFER    | DAVIS        |          3 | 2020-07-30 18:07:51 |
+|        5 | JOHNNY      | LOLLOBRIGIDA |          5 | 2020-07-30 18:07:51 |
+|        6 | BETTE       | NICHOLSON    |          7 | 2020-07-30 18:07:51 |
+|        7 | GRACE       | MOSTEL       |          6 | 2020-07-30 18:07:51 |
+|        8 | MATTHEW     | JOHANSSON    |          8 | 2020-07-30 18:07:51 |
+|        9 | JOE         | SWANK        |         10 | 2020-07-30 18:07:51 |
+|       10 | CHRISTIAN   | GABLE        |          9 | 2020-07-30 18:07:51 |
+|       11 | ZERO        | CAGE         |         11 | 2020-07-30 18:07:51 |
+|       12 | KARL        | BERRY        |         13 | 2020-07-30 18:07:51 |
+|       13 | UMA         | WOOD         |        110 | 2020-07-30 18:07:51 |
+|       14 | VIVIEN      | BERGEN       |         25 | 2020-07-30 18:07:51 |
+|       15 | CUBA        | OLIVIER      |         40 | 2020-07-30 18:07:51 |
+|       16 | FRED        | COSTNER      |         65 | 2020-07-30 18:07:51 |
+|       17 | HELEN       | VOIGHT       |         77 | 2020-07-30 18:07:51 |
+|       18 | DAN         | TORN         |        414 | 2020-07-30 18:07:51 |
+|       19 | BOB         | FAWCETT      |        125 | 2020-07-30 18:07:51 |
+|       20 | LUCILLE     | TRACY        |         80 | 2020-07-30 18:07:51 |
+|       21 | KIRSTEN     | PALTROW      |         99 | 2020-07-30 18:07:51 |
+|       22 | ELVIS       | MARX         |         44 | 2020-07-30 18:07:51 |
+|       23 | SANDRA      | KILMER       |         33 | 2020-07-30 18:09:05 |
+|       24 | CAMERON     | STREEP       |         63 | 2020-07-30 18:07:51 |
+|       25 | KEVIN       | BLOOM        |         67 | 2020-07-30 18:09:44 |
+|       26 | RIP         | CRAWFORD     |         46 | 2020-07-30 18:07:51 |
+|       27 | JULIA       | MCQUEEN      |         47 | 2020-07-30 18:07:51 |
+|       28 | WOODY       | HOFFMAN      |         57 | 2020-07-30 18:07:51 |
+|       29 | ALEC        | WAYNE        |         74 | 2020-07-30 18:07:51 |
+|       30 | SANDRA      | PECK         |         75 | 2020-07-30 18:07:51 |
+|       31 | SISSY       | SOBIESKI     |         16 | 2020-07-30 18:07:51 |
+|       32 | TIM         | HACKMAN      |         68 | 2020-07-30 18:07:51 |
+|       33 | MILLA       | PECK         |         86 | 2020-07-30 18:07:51 |
+|       34 | AUDREY      | OLIVIER      |         78 | 2020-07-30 18:07:51 |
+|       35 | JUDY        | DEAN         |         53 | 2020-07-30 18:07:51 |
+|       36 | BURT        | DUKAKIS      |         35 | 2020-07-30 18:07:51 |
+|       37 | VAL         | BOLGER       |         72 | 2020-07-30 18:07:51 |
+|       38 | TOM         | MCKELLEN     |         27 | 2020-07-30 18:07:51 |
+|       39 | GOLDIE      | BRODY        |         66 | 2020-07-30 18:07:51 |
+|       40 | JOHNNY      | CAGE         |         61 | 2020-07-30 18:07:51 |
+|       41 | JODIE       | DEGENERES    |         42 | 2020-07-30 18:07:51 |
+|       42 | TOM         | MIRANDA      |         79 | 2020-07-30 18:07:51 |
+|       43 | KIRK        | JOVOVICH     |         24 | 2020-07-30 18:07:51 |
+|       44 | NICK        | STALLONE     |         97 | 2020-07-30 18:07:51 |
+|       45 | REESE       | KILMER       |        100 | 2020-07-30 18:07:51 |
+|       46 | PARKER      | GOLDBERG     |        411 | 2020-07-30 18:10:25 |
+|       47 | JULIA       | BARRYMORE    |        104 | 2020-07-30 18:07:51 |
+|       48 | FRANCES     | DAY-LEWIS    |        108 | 2020-07-30 18:07:51 |
+|       49 | ANNE        | CRONYN       |        128 | 2020-07-30 18:07:51 |
+|       50 | NATALIE     | HOPKINS      |         54 | 2020-07-30 18:07:51 |
+|       51 | GARY        | PHOENIX      |        200 | 2020-07-30 18:07:51 |
+|       52 | CARMEN      | HUNT         |        158 | 2020-07-30 18:07:51 |
+|       53 | MENA        | TEMPLE       |        154 | 2020-07-30 18:07:51 |
+|       54 | PENELOPE    | PINKETT      |        199 | 2020-07-30 18:07:51 |
+|       55 | FAY         | KILMER       |         19 | 2020-07-30 18:07:51 |
+|       56 | DAN         | HARRIS       |        327 | 2020-07-30 18:07:51 |
+|       57 | JUDE        | CRUISE       |        124 | 2020-07-30 18:07:51 |
+|       58 | CHRISTIAN   | AKROYD       |        121 | 2020-07-30 18:07:51 |
+|       59 | DUSTIN      | TAUTOU       |        119 | 2020-07-30 18:07:51 |
+|       60 | HENRY       | BERRY        |        191 | 2020-07-30 18:07:51 |
+|       61 | CHRISTIAN   | NEESON       |        185 | 2020-07-30 18:07:51 |
+|       62 | JAYNE       | NEESON       |        351 | 2020-07-30 18:07:51 |
+|       63 | CAMERON     | WRAY         |        135 | 2020-07-30 18:07:51 |
+|       64 | RAY         | JOHANSSON    |        153 | 2020-07-30 18:07:51 |
+|       65 | ANGELA      | HUDSON       |        103 | 2020-07-30 18:07:51 |
+|       66 | MARY        | TANDY        |        217 | 2020-07-30 18:07:51 |
+|       67 | JESSICA     | BAILEY       |         45 | 2020-07-30 18:07:51 |
+|       68 | RIP         | WINSLET      |        148 | 2020-07-30 18:07:51 |
+|       69 | KENNETH     | PALTROW      |        184 | 2020-07-30 18:07:51 |
+|       70 | MICHELLE    | MCCONAUGHEY  |        265 | 2020-07-30 18:07:51 |
+|       71 | ADAM        | GRANT        |        258 | 2020-07-30 18:07:51 |
+|       72 | SEAN        | WILLIAMS     |        252 | 2020-07-30 19:39:58 |
+|       73 | GARY        | PENN         |        175 | 2020-07-30 18:07:51 |
+|       74 | MILLA       | KEITEL       |        157 | 2020-07-30 18:07:51 |
+|       75 | BURT        | POSEY        |        141 | 2020-07-30 18:07:51 |
+|       76 | ANGELINA    | ASTAIRE      |        114 | 2020-07-30 18:07:51 |
+|       77 | CARY        | MCCONAUGHEY  |        315 | 2020-07-30 18:07:51 |
+|       78 | GROUCHO     | SINATRA      |        112 | 2020-07-30 18:07:51 |
+|       79 | MAE         | HOFFMAN      |        113 | 2020-07-30 18:07:51 |
+|       80 | RALPH       | CRUZ         |        132 | 2020-07-30 18:07:51 |
+|       81 | SCARLETT    | DAMON        |        123 | 2020-07-30 18:07:51 |
+|       82 | WOODY       | JOLIE        |        131 | 2020-07-30 18:07:51 |
+|       83 | BEN         | WILLIS       |        183 | 2020-07-30 18:07:51 |
+|       84 | JAMES       | PITT         |        138 | 2020-07-30 18:07:51 |
+|       85 | MINNIE      | ZELLWEGER    |        171 | 2020-07-30 18:07:51 |
+|       86 | GREG        | CHAPLIN      |        117 | 2020-07-30 18:07:51 |
+|       87 | SPENCER     | PECK         |        235 | 2020-07-30 18:07:51 |
+|       88 | KENNETH     | PESCI        |        213 | 2020-07-30 18:07:51 |
+|       89 | CHARLIZE    | DENCH        |        216 | 2020-07-30 18:11:41 |
+|       90 | SEAN        | GUINESS      |        201 | 2020-07-30 18:07:51 |
+|       91 | CHRISTOPHER | BERRY        |        118 | 2020-07-30 18:07:51 |
+|       92 | KIRSTEN     | AKROYD       |        181 | 2020-07-30 18:07:51 |
+|       93 | ELLEN       | PRESLEY      |        219 | 2020-07-30 18:07:51 |
+|       94 | KENNETH     | TORN         |        143 | 2020-07-30 18:07:51 |
+|       95 | DARYL       | WAHLBERG     |        144 | 2020-07-30 18:07:51 |
+|       96 | GENE        | WILLIS       |        187 | 2020-07-30 18:07:51 |
+|       97 | MEG         | HAWKE        |        178 | 2020-07-30 18:07:51 |
+|       98 | CHRIS       | BRIDGES      |        116 | 2020-07-30 18:07:51 |
+|       99 | JIM         | MOSTEL       |        161 | 2020-07-30 18:07:51 |
+|      100 | SPENCER     | DEPP         |        142 | 2020-07-30 18:07:51 |
+|      101 | SUSAN       | DAVIS        |        242 | 2020-07-30 18:07:51 |
+|      102 | WALTER      | TORN         |        173 | 2020-07-30 18:07:51 |
+|      103 | MATTHEW     | LEIGH        |        137 | 2020-07-30 18:07:51 |
+|      104 | PENELOPE    | CRONYN       |        168 | 2020-07-30 18:07:51 |
+|      105 | SIDNEY      | CROWE        |        186 | 2020-07-30 18:07:51 |
+|      106 | GROUCHO     | DUNST        |        197 | 2020-07-30 18:07:51 |
+|      107 | GINA        | DEGENERES    |        169 | 2020-07-30 18:07:51 |
+|      108 | WARREN      | NOLTE        |         69 | 2020-07-30 18:07:51 |
+|      109 | SYLVESTER   | DERN         |        177 | 2020-07-30 18:07:51 |
+|      110 | SUSAN       | DAVIS        |        188 | 2020-07-30 18:07:51 |
+|      111 | CAMERON     | ZELLWEGER    |        133 | 2020-07-30 18:07:51 |
+|      112 | RUSSELL     | BACALL       |        122 | 2020-07-30 18:07:51 |
+|      113 | MORGAN      | HOPKINS      |        111 | 2020-07-30 18:07:51 |
+|      114 | MORGAN      | MCDORMAND    |        211 | 2020-07-30 18:07:51 |
+|      115 | HARRISON    | BALE         |        233 | 2020-07-30 18:07:51 |
+|      116 | DAN         | STREEP       |        288 | 2020-07-30 18:07:51 |
+|      117 | RENEE       | TRACY        |        277 | 2020-07-30 18:07:51 |
+|      118 | CUBA        | ALLEN        |        237 | 2020-07-30 18:07:51 |
+|      119 | WARREN      | JACKMAN      |        269 | 2020-07-30 18:07:51 |
+|      120 | PENELOPE    | MONROE       |        297 | 2020-07-30 18:07:51 |
+|      121 | LIZA        | BERGMAN      |        286 | 2020-07-30 18:07:51 |
+|      122 | SALMA       | NOLTE        |        268 | 2020-07-30 18:07:51 |
+|      123 | JULIANNE    | DENCH        |        241 | 2020-07-30 18:07:51 |
+|      124 | SCARLETT    | BENING       |        243 | 2020-07-30 18:07:51 |
+|      125 | ALBERT      | NOLTE        |        281 | 2020-07-30 18:07:51 |
+|      126 | FRANCES     | TOMEI        |        218 | 2020-07-30 18:07:51 |
+|      127 | KEVIN       | GARLAND      |        283 | 2020-07-30 18:07:51 |
+|      128 | CATE        | MCQUEEN      |        238 | 2020-07-30 18:07:51 |
+|      129 | DARYL       | CRAWFORD     |        208 | 2020-07-30 18:07:51 |
+|      130 | GRETA       | KEITEL       |        204 | 2020-07-30 18:07:51 |
+|      131 | JANE        | JACKMAN      |        214 | 2020-07-30 18:07:51 |
+|      132 | ADAM        | HOPPER       |        224 | 2020-07-30 18:07:51 |
+|      133 | RICHARD     | PENN         |        222 | 2020-07-30 18:07:51 |
+|      134 | GENE        | HOPKINS      |        251 | 2020-07-30 18:07:51 |
+|      135 | RITA        | REYNOLDS     |        250 | 2020-07-30 18:07:51 |
+|      136 | ED          | MANSFIELD    |        256 | 2020-07-30 18:07:51 |
+|      137 | MORGAN      | WILLIAMS     |        245 | 2020-07-30 18:07:51 |
+|      138 | LUCILLE     | DEE          |        231 | 2020-07-30 18:12:03 |
+|      139 | EWAN        | GOODING      |        225 | 2020-07-30 18:07:51 |
+|      140 | WHOOPI      | HURT         |        234 | 2020-07-30 18:07:51 |
+|      141 | CATE        | HARRIS       |        210 | 2020-07-30 18:11:19 |
+|      142 | JADA        | RYDER        |        236 | 2020-07-30 18:07:51 |
+|      143 | RIVER       | DEAN         |         36 | 2020-07-30 18:07:51 |
+|      144 | ANGELA      | WITHERSPOON  |         64 | 2020-07-30 18:07:51 |
+|      145 | KIM         | ALLEN        |        264 | 2020-07-30 18:07:51 |
+|      146 | ALBERT      | JOHANSSON    |        136 | 2020-07-30 18:07:51 |
+|      147 | FAY         | WINSLET      |        220 | 2020-07-30 18:12:23 |
+|      148 | EMILY       | DEE          |        209 | 2020-07-30 18:07:51 |
+|      149 | RUSSELL     | TEMPLE       |        313 | 2020-07-30 18:07:51 |
+|      150 | JAYNE       | NOLTE        |        345 | 2020-07-30 18:07:51 |
+|      151 | GEOFFREY    | HESTON       |        325 | 2020-07-30 18:07:51 |
+|      152 | BEN         | HARRIS       |        311 | 2020-07-30 18:07:51 |
+|      153 | MINNIE      | KILMER       |        336 | 2020-07-30 18:07:51 |
+|      154 | MERYL       | GIBSON       |        337 | 2020-07-30 18:07:51 |
+|      155 | IAN         | TANDY        |        324 | 2020-07-30 18:07:51 |
+|      156 | FAY         | WOOD         |        304 | 2020-07-30 18:07:51 |
+|      157 | GRETA       | MALDEN       |        355 | 2020-07-30 18:07:51 |
+|      158 | VIVIEN      | BASINGER     |        365 | 2020-07-30 18:07:51 |
+|      159 | LAURA       | BRODY        |        366 | 2020-07-30 18:07:51 |
+|      160 | CHRIS       | DEPP         |        377 | 2020-07-30 18:07:51 |
+|      161 | HARVEY      | HOPE         |        375 | 2020-07-30 18:07:51 |
+|      162 | OPRAH       | KILMER       |        357 | 2020-07-30 18:07:51 |
+|      163 | CHRISTOPHER | WEST         |        388 | 2020-07-30 18:07:51 |
+|      164 | HUMPHREY    | WILLIS       |        387 | 2020-07-30 18:07:51 |
+|      165 | AL          | GARLAND      |        386 | 2020-07-30 18:07:51 |
+|      166 | NICK        | DEGENERES    |        310 | 2020-07-30 19:40:21 |
+|      167 | LAURENCE    | BULLOCK      |        314 | 2020-07-30 18:07:51 |
+|      168 | WILL        | WILSON       |        333 | 2020-07-30 18:07:51 |
+|      169 | KENNETH     | HOFFMAN      |        303 | 2020-07-30 18:07:51 |
+|      170 | MENA        | HOPPER       |        317 | 2020-07-30 18:07:51 |
+|      171 | OLYMPIA     | PFEIFFER     |        371 | 2020-07-30 18:07:51 |
+|      172 | GROUCHO     | WILLIAMS     |        358 | 2020-07-30 18:07:51 |
+|      173 | ALAN        | DREYFUSS     |        369 | 2020-07-30 18:07:51 |
+|      174 | MICHAEL     | BENING       |        368 | 2020-07-30 18:07:51 |
+|      175 | WILLIAM     | HACKMAN      |        397 | 2020-07-30 18:07:51 |
+|      176 | JON         | CHASE        |        300 | 2020-07-30 18:07:51 |
+|      177 | GENE        | MCKELLEN     |        305 | 2020-07-30 18:07:51 |
+|      178 | LISA        | MONROE       |        359 | 2020-07-30 18:07:51 |
+|      179 | ED          | GUINESS      |        353 | 2020-07-30 18:07:51 |
+|      180 | JEFF        | SILVERSTONE  |        308 | 2020-07-30 18:07:51 |
+|      181 | MATTHEW     | CARREY       |        380 | 2020-07-30 18:07:51 |
+|      182 | DEBBIE      | AKROYD       |        319 | 2020-07-30 18:07:51 |
+|      183 | RUSSELL     | CLOSE        |        321 | 2020-07-30 18:07:51 |
+|      184 | HUMPHREY    | GARLAND      |        312 | 2020-07-30 18:07:51 |
+|      185 | MICHAEL     | BOLGER       |        101 | 2020-07-30 18:07:51 |
+|      186 | JULIA       | ZELLWEGER    |        301 | 2020-07-30 18:07:51 |
+|      187 | RENEE       | BALL         |        307 | 2020-07-30 18:07:51 |
+|      188 | ROCK        | DUKAKIS      |        372 | 2020-07-30 18:07:51 |
+|      189 | CUBA        | BIRCH        |        341 | 2020-07-30 18:07:51 |
+|      190 | AUDREY      | BAILEY       |        263 | 2020-07-30 18:07:51 |
+|      191 | GREGORY     | GOODING      |        339 | 2020-07-30 18:07:51 |
+|      192 | JOHN        | SUVARI       |        363 | 2020-07-30 18:07:51 |
+|      193 | BURT        | TEMPLE       |        239 | 2020-07-30 18:07:51 |
+|      194 | MERYL       | ALLEN        |        240 | 2020-07-30 18:07:51 |
+|      195 | JAYNE       | SILVERSTONE  |        347 | 2020-07-30 18:07:51 |
+|      196 | BELA        | WALKEN       |        350 | 2020-07-30 18:07:51 |
+|      197 | REESE       | WEST         |        360 | 2020-07-30 18:07:51 |
+|      198 | MARY        | KEITEL       |        260 | 2020-07-30 18:07:51 |
+|      199 | JULIA       | FAWCETT      |        361 | 2020-07-30 18:07:51 |
+|      200 | THORA       | TEMPLE       |        401 | 2020-07-30 18:07:51 |
++----------+-------------+--------------+------------+---------------------+
+200 rows in set (0.00 sec)
+
+mysql> insert into actor( first_name ,  last_name ,  address_id , last_update) VALUES("AYUSH" , "RANA" , 317 , 2020-07-30 19:40:21);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '19:40:21)' at line 1
+mysql> insert into actor( first_name ,  last_name ,  address_id , last_update) VALUES("AYUSH" , "RANA" , 317 , "2020-07-30 19:40:21");
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select * from actor;
++----------+-------------+--------------+------------+---------------------+
+| actor_id | first_name  | last_name    | address_id | last_update         |
++----------+-------------+--------------+------------+---------------------+
+|        1 | PENELOPE    | GUINESS      |          1 | 2020-07-30 18:07:51 |
+|        2 | NICK        | WAHLBERG     |          4 | 2020-07-30 18:07:51 |
+|        3 | ED          | CHASE        |          2 | 2020-07-30 18:07:51 |
+|        4 | JENNIFER    | DAVIS        |          3 | 2020-07-30 18:07:51 |
+|        5 | JOHNNY      | LOLLOBRIGIDA |          5 | 2020-07-30 18:07:51 |
+|        6 | BETTE       | NICHOLSON    |          7 | 2020-07-30 18:07:51 |
+|        7 | GRACE       | MOSTEL       |          6 | 2020-07-30 18:07:51 |
+|        8 | MATTHEW     | JOHANSSON    |          8 | 2020-07-30 18:07:51 |
+|        9 | JOE         | SWANK        |         10 | 2020-07-30 18:07:51 |
+|       10 | CHRISTIAN   | GABLE        |          9 | 2020-07-30 18:07:51 |
+|       11 | ZERO        | CAGE         |         11 | 2020-07-30 18:07:51 |
+|       12 | KARL        | BERRY        |         13 | 2020-07-30 18:07:51 |
+|       13 | UMA         | WOOD         |        110 | 2020-07-30 18:07:51 |
+|       14 | VIVIEN      | BERGEN       |         25 | 2020-07-30 18:07:51 |
+|       15 | CUBA        | OLIVIER      |         40 | 2020-07-30 18:07:51 |
+|       16 | FRED        | COSTNER      |         65 | 2020-07-30 18:07:51 |
+|       17 | HELEN       | VOIGHT       |         77 | 2020-07-30 18:07:51 |
+|       18 | DAN         | TORN         |        414 | 2020-07-30 18:07:51 |
+|       19 | BOB         | FAWCETT      |        125 | 2020-07-30 18:07:51 |
+|       20 | LUCILLE     | TRACY        |         80 | 2020-07-30 18:07:51 |
+|       21 | KIRSTEN     | PALTROW      |         99 | 2020-07-30 18:07:51 |
+|       22 | ELVIS       | MARX         |         44 | 2020-07-30 18:07:51 |
+|       23 | SANDRA      | KILMER       |         33 | 2020-07-30 18:09:05 |
+|       24 | CAMERON     | STREEP       |         63 | 2020-07-30 18:07:51 |
+|       25 | KEVIN       | BLOOM        |         67 | 2020-07-30 18:09:44 |
+|       26 | RIP         | CRAWFORD     |         46 | 2020-07-30 18:07:51 |
+|       27 | JULIA       | MCQUEEN      |         47 | 2020-07-30 18:07:51 |
+|       28 | WOODY       | HOFFMAN      |         57 | 2020-07-30 18:07:51 |
+|       29 | ALEC        | WAYNE        |         74 | 2020-07-30 18:07:51 |
+|       30 | SANDRA      | PECK         |         75 | 2020-07-30 18:07:51 |
+|       31 | SISSY       | SOBIESKI     |         16 | 2020-07-30 18:07:51 |
+|       32 | TIM         | HACKMAN      |         68 | 2020-07-30 18:07:51 |
+|       33 | MILLA       | PECK         |         86 | 2020-07-30 18:07:51 |
+|       34 | AUDREY      | OLIVIER      |         78 | 2020-07-30 18:07:51 |
+|       35 | JUDY        | DEAN         |         53 | 2020-07-30 18:07:51 |
+|       36 | BURT        | DUKAKIS      |         35 | 2020-07-30 18:07:51 |
+|       37 | VAL         | BOLGER       |         72 | 2020-07-30 18:07:51 |
+|       38 | TOM         | MCKELLEN     |         27 | 2020-07-30 18:07:51 |
+|       39 | GOLDIE      | BRODY        |         66 | 2020-07-30 18:07:51 |
+|       40 | JOHNNY      | CAGE         |         61 | 2020-07-30 18:07:51 |
+|       41 | JODIE       | DEGENERES    |         42 | 2020-07-30 18:07:51 |
+|       42 | TOM         | MIRANDA      |         79 | 2020-07-30 18:07:51 |
+|       43 | KIRK        | JOVOVICH     |         24 | 2020-07-30 18:07:51 |
+|       44 | NICK        | STALLONE     |         97 | 2020-07-30 18:07:51 |
+|       45 | REESE       | KILMER       |        100 | 2020-07-30 18:07:51 |
+|       46 | PARKER      | GOLDBERG     |        411 | 2020-07-30 18:10:25 |
+|       47 | JULIA       | BARRYMORE    |        104 | 2020-07-30 18:07:51 |
+|       48 | FRANCES     | DAY-LEWIS    |        108 | 2020-07-30 18:07:51 |
+|       49 | ANNE        | CRONYN       |        128 | 2020-07-30 18:07:51 |
+|       50 | NATALIE     | HOPKINS      |         54 | 2020-07-30 18:07:51 |
+|       51 | GARY        | PHOENIX      |        200 | 2020-07-30 18:07:51 |
+|       52 | CARMEN      | HUNT         |        158 | 2020-07-30 18:07:51 |
+|       53 | MENA        | TEMPLE       |        154 | 2020-07-30 18:07:51 |
+|       54 | PENELOPE    | PINKETT      |        199 | 2020-07-30 18:07:51 |
+|       55 | FAY         | KILMER       |         19 | 2020-07-30 18:07:51 |
+|       56 | DAN         | HARRIS       |        327 | 2020-07-30 18:07:51 |
+|       57 | JUDE        | CRUISE       |        124 | 2020-07-30 18:07:51 |
+|       58 | CHRISTIAN   | AKROYD       |        121 | 2020-07-30 18:07:51 |
+|       59 | DUSTIN      | TAUTOU       |        119 | 2020-07-30 18:07:51 |
+|       60 | HENRY       | BERRY        |        191 | 2020-07-30 18:07:51 |
+|       61 | CHRISTIAN   | NEESON       |        185 | 2020-07-30 18:07:51 |
+|       62 | JAYNE       | NEESON       |        351 | 2020-07-30 18:07:51 |
+|       63 | CAMERON     | WRAY         |        135 | 2020-07-30 18:07:51 |
+|       64 | RAY         | JOHANSSON    |        153 | 2020-07-30 18:07:51 |
+|       65 | ANGELA      | HUDSON       |        103 | 2020-07-30 18:07:51 |
+|       66 | MARY        | TANDY        |        217 | 2020-07-30 18:07:51 |
+|       67 | JESSICA     | BAILEY       |         45 | 2020-07-30 18:07:51 |
+|       68 | RIP         | WINSLET      |        148 | 2020-07-30 18:07:51 |
+|       69 | KENNETH     | PALTROW      |        184 | 2020-07-30 18:07:51 |
+|       70 | MICHELLE    | MCCONAUGHEY  |        265 | 2020-07-30 18:07:51 |
+|       71 | ADAM        | GRANT        |        258 | 2020-07-30 18:07:51 |
+|       72 | SEAN        | WILLIAMS     |        252 | 2020-07-30 19:39:58 |
+|       73 | GARY        | PENN         |        175 | 2020-07-30 18:07:51 |
+|       74 | MILLA       | KEITEL       |        157 | 2020-07-30 18:07:51 |
+|       75 | BURT        | POSEY        |        141 | 2020-07-30 18:07:51 |
+|       76 | ANGELINA    | ASTAIRE      |        114 | 2020-07-30 18:07:51 |
+|       77 | CARY        | MCCONAUGHEY  |        315 | 2020-07-30 18:07:51 |
+|       78 | GROUCHO     | SINATRA      |        112 | 2020-07-30 18:07:51 |
+|       79 | MAE         | HOFFMAN      |        113 | 2020-07-30 18:07:51 |
+|       80 | RALPH       | CRUZ         |        132 | 2020-07-30 18:07:51 |
+|       81 | SCARLETT    | DAMON        |        123 | 2020-07-30 18:07:51 |
+|       82 | WOODY       | JOLIE        |        131 | 2020-07-30 18:07:51 |
+|       83 | BEN         | WILLIS       |        183 | 2020-07-30 18:07:51 |
+|       84 | JAMES       | PITT         |        138 | 2020-07-30 18:07:51 |
+|       85 | MINNIE      | ZELLWEGER    |        171 | 2020-07-30 18:07:51 |
+|       86 | GREG        | CHAPLIN      |        117 | 2020-07-30 18:07:51 |
+|       87 | SPENCER     | PECK         |        235 | 2020-07-30 18:07:51 |
+|       88 | KENNETH     | PESCI        |        213 | 2020-07-30 18:07:51 |
+|       89 | CHARLIZE    | DENCH        |        216 | 2020-07-30 18:11:41 |
+|       90 | SEAN        | GUINESS      |        201 | 2020-07-30 18:07:51 |
+|       91 | CHRISTOPHER | BERRY        |        118 | 2020-07-30 18:07:51 |
+|       92 | KIRSTEN     | AKROYD       |        181 | 2020-07-30 18:07:51 |
+|       93 | ELLEN       | PRESLEY      |        219 | 2020-07-30 18:07:51 |
+|       94 | KENNETH     | TORN         |        143 | 2020-07-30 18:07:51 |
+|       95 | DARYL       | WAHLBERG     |        144 | 2020-07-30 18:07:51 |
+|       96 | GENE        | WILLIS       |        187 | 2020-07-30 18:07:51 |
+|       97 | MEG         | HAWKE        |        178 | 2020-07-30 18:07:51 |
+|       98 | CHRIS       | BRIDGES      |        116 | 2020-07-30 18:07:51 |
+|       99 | JIM         | MOSTEL       |        161 | 2020-07-30 18:07:51 |
+|      100 | SPENCER     | DEPP         |        142 | 2020-07-30 18:07:51 |
+|      101 | SUSAN       | DAVIS        |        242 | 2020-07-30 18:07:51 |
+|      102 | WALTER      | TORN         |        173 | 2020-07-30 18:07:51 |
+|      103 | MATTHEW     | LEIGH        |        137 | 2020-07-30 18:07:51 |
+|      104 | PENELOPE    | CRONYN       |        168 | 2020-07-30 18:07:51 |
+|      105 | SIDNEY      | CROWE        |        186 | 2020-07-30 18:07:51 |
+|      106 | GROUCHO     | DUNST        |        197 | 2020-07-30 18:07:51 |
+|      107 | GINA        | DEGENERES    |        169 | 2020-07-30 18:07:51 |
+|      108 | WARREN      | NOLTE        |         69 | 2020-07-30 18:07:51 |
+|      109 | SYLVESTER   | DERN         |        177 | 2020-07-30 18:07:51 |
+|      110 | SUSAN       | DAVIS        |        188 | 2020-07-30 18:07:51 |
+|      111 | CAMERON     | ZELLWEGER    |        133 | 2020-07-30 18:07:51 |
+|      112 | RUSSELL     | BACALL       |        122 | 2020-07-30 18:07:51 |
+|      113 | MORGAN      | HOPKINS      |        111 | 2020-07-30 18:07:51 |
+|      114 | MORGAN      | MCDORMAND    |        211 | 2020-07-30 18:07:51 |
+|      115 | HARRISON    | BALE         |        233 | 2020-07-30 18:07:51 |
+|      116 | DAN         | STREEP       |        288 | 2020-07-30 18:07:51 |
+|      117 | RENEE       | TRACY        |        277 | 2020-07-30 18:07:51 |
+|      118 | CUBA        | ALLEN        |        237 | 2020-07-30 18:07:51 |
+|      119 | WARREN      | JACKMAN      |        269 | 2020-07-30 18:07:51 |
+|      120 | PENELOPE    | MONROE       |        297 | 2020-07-30 18:07:51 |
+|      121 | LIZA        | BERGMAN      |        286 | 2020-07-30 18:07:51 |
+|      122 | SALMA       | NOLTE        |        268 | 2020-07-30 18:07:51 |
+|      123 | JULIANNE    | DENCH        |        241 | 2020-07-30 18:07:51 |
+|      124 | SCARLETT    | BENING       |        243 | 2020-07-30 18:07:51 |
+|      125 | ALBERT      | NOLTE        |        281 | 2020-07-30 18:07:51 |
+|      126 | FRANCES     | TOMEI        |        218 | 2020-07-30 18:07:51 |
+|      127 | KEVIN       | GARLAND      |        283 | 2020-07-30 18:07:51 |
+|      128 | CATE        | MCQUEEN      |        238 | 2020-07-30 18:07:51 |
+|      129 | DARYL       | CRAWFORD     |        208 | 2020-07-30 18:07:51 |
+|      130 | GRETA       | KEITEL       |        204 | 2020-07-30 18:07:51 |
+|      131 | JANE        | JACKMAN      |        214 | 2020-07-30 18:07:51 |
+|      132 | ADAM        | HOPPER       |        224 | 2020-07-30 18:07:51 |
+|      133 | RICHARD     | PENN         |        222 | 2020-07-30 18:07:51 |
+|      134 | GENE        | HOPKINS      |        251 | 2020-07-30 18:07:51 |
+|      135 | RITA        | REYNOLDS     |        250 | 2020-07-30 18:07:51 |
+|      136 | ED          | MANSFIELD    |        256 | 2020-07-30 18:07:51 |
+|      137 | MORGAN      | WILLIAMS     |        245 | 2020-07-30 18:07:51 |
+|      138 | LUCILLE     | DEE          |        231 | 2020-07-30 18:12:03 |
+|      139 | EWAN        | GOODING      |        225 | 2020-07-30 18:07:51 |
+|      140 | WHOOPI      | HURT         |        234 | 2020-07-30 18:07:51 |
+|      141 | CATE        | HARRIS       |        210 | 2020-07-30 18:11:19 |
+|      142 | JADA        | RYDER        |        236 | 2020-07-30 18:07:51 |
+|      143 | RIVER       | DEAN         |         36 | 2020-07-30 18:07:51 |
+|      144 | ANGELA      | WITHERSPOON  |         64 | 2020-07-30 18:07:51 |
+|      145 | KIM         | ALLEN        |        264 | 2020-07-30 18:07:51 |
+|      146 | ALBERT      | JOHANSSON    |        136 | 2020-07-30 18:07:51 |
+|      147 | FAY         | WINSLET      |        220 | 2020-07-30 18:12:23 |
+|      148 | EMILY       | DEE          |        209 | 2020-07-30 18:07:51 |
+|      149 | RUSSELL     | TEMPLE       |        313 | 2020-07-30 18:07:51 |
+|      150 | JAYNE       | NOLTE        |        345 | 2020-07-30 18:07:51 |
+|      151 | GEOFFREY    | HESTON       |        325 | 2020-07-30 18:07:51 |
+|      152 | BEN         | HARRIS       |        311 | 2020-07-30 18:07:51 |
+|      153 | MINNIE      | KILMER       |        336 | 2020-07-30 18:07:51 |
+|      154 | MERYL       | GIBSON       |        337 | 2020-07-30 18:07:51 |
+|      155 | IAN         | TANDY        |        324 | 2020-07-30 18:07:51 |
+|      156 | FAY         | WOOD         |        304 | 2020-07-30 18:07:51 |
+|      157 | GRETA       | MALDEN       |        355 | 2020-07-30 18:07:51 |
+|      158 | VIVIEN      | BASINGER     |        365 | 2020-07-30 18:07:51 |
+|      159 | LAURA       | BRODY        |        366 | 2020-07-30 18:07:51 |
+|      160 | CHRIS       | DEPP         |        377 | 2020-07-30 18:07:51 |
+|      161 | HARVEY      | HOPE         |        375 | 2020-07-30 18:07:51 |
+|      162 | OPRAH       | KILMER       |        357 | 2020-07-30 18:07:51 |
+|      163 | CHRISTOPHER | WEST         |        388 | 2020-07-30 18:07:51 |
+|      164 | HUMPHREY    | WILLIS       |        387 | 2020-07-30 18:07:51 |
+|      165 | AL          | GARLAND      |        386 | 2020-07-30 18:07:51 |
+|      166 | NICK        | DEGENERES    |        310 | 2020-07-30 19:40:21 |
+|      167 | LAURENCE    | BULLOCK      |        314 | 2020-07-30 18:07:51 |
+|      168 | WILL        | WILSON       |        333 | 2020-07-30 18:07:51 |
+|      169 | KENNETH     | HOFFMAN      |        303 | 2020-07-30 18:07:51 |
+|      170 | MENA        | HOPPER       |        317 | 2020-07-30 18:07:51 |
+|      171 | OLYMPIA     | PFEIFFER     |        371 | 2020-07-30 18:07:51 |
+|      172 | GROUCHO     | WILLIAMS     |        358 | 2020-07-30 18:07:51 |
+|      173 | ALAN        | DREYFUSS     |        369 | 2020-07-30 18:07:51 |
+|      174 | MICHAEL     | BENING       |        368 | 2020-07-30 18:07:51 |
+|      175 | WILLIAM     | HACKMAN      |        397 | 2020-07-30 18:07:51 |
+|      176 | JON         | CHASE        |        300 | 2020-07-30 18:07:51 |
+|      177 | GENE        | MCKELLEN     |        305 | 2020-07-30 18:07:51 |
+|      178 | LISA        | MONROE       |        359 | 2020-07-30 18:07:51 |
+|      179 | ED          | GUINESS      |        353 | 2020-07-30 18:07:51 |
+|      180 | JEFF        | SILVERSTONE  |        308 | 2020-07-30 18:07:51 |
+|      181 | MATTHEW     | CARREY       |        380 | 2020-07-30 18:07:51 |
+|      182 | DEBBIE      | AKROYD       |        319 | 2020-07-30 18:07:51 |
+|      183 | RUSSELL     | CLOSE        |        321 | 2020-07-30 18:07:51 |
+|      184 | HUMPHREY    | GARLAND      |        312 | 2020-07-30 18:07:51 |
+|      185 | MICHAEL     | BOLGER       |        101 | 2020-07-30 18:07:51 |
+|      186 | JULIA       | ZELLWEGER    |        301 | 2020-07-30 18:07:51 |
+|      187 | RENEE       | BALL         |        307 | 2020-07-30 18:07:51 |
+|      188 | ROCK        | DUKAKIS      |        372 | 2020-07-30 18:07:51 |
+|      189 | CUBA        | BIRCH        |        341 | 2020-07-30 18:07:51 |
+|      190 | AUDREY      | BAILEY       |        263 | 2020-07-30 18:07:51 |
+|      191 | GREGORY     | GOODING      |        339 | 2020-07-30 18:07:51 |
+|      192 | JOHN        | SUVARI       |        363 | 2020-07-30 18:07:51 |
+|      193 | BURT        | TEMPLE       |        239 | 2020-07-30 18:07:51 |
+|      194 | MERYL       | ALLEN        |        240 | 2020-07-30 18:07:51 |
+|      195 | JAYNE       | SILVERSTONE  |        347 | 2020-07-30 18:07:51 |
+|      196 | BELA        | WALKEN       |        350 | 2020-07-30 18:07:51 |
+|      197 | REESE       | WEST         |        360 | 2020-07-30 18:07:51 |
+|      198 | MARY        | KEITEL       |        260 | 2020-07-30 18:07:51 |
+|      199 | JULIA       | FAWCETT      |        361 | 2020-07-30 18:07:51 |
+|      200 | THORA       | TEMPLE       |        401 | 2020-07-30 18:07:51 |
+|      201 | AYUSH       | RANA         |        317 | 2020-07-30 19:40:21 |
++----------+-------------+--------------+------------+---------------------+
+201 rows in set (0.00 sec)
+
+mysql> select  first_name ,  last_name , address ,city , district , country , phone from actor JOIN address ON actor.address_id = address.address_id JOIN city ON address.city_id = city.city_id JOIN country ON city.country_id = country.country_id ;
++-------------+--------------+----------------------------------------+----------------------------+----------------------+---------------------------------------+--------------+
+| first_name  | last_name    | address                                | city                       | district             | country                               | phone        |
++-------------+--------------+----------------------------------------+----------------------------+----------------------+---------------------------------------+--------------+
+| PENELOPE    | GUINESS      | 47 MySakila Drive                      | Lethbridge                 | Alberta              | Canada                                |              |
+| NICK        | WAHLBERG     | 1411 Lillydale Drive                   | Woodridge                  | QLD                  | Australia                             | 6172235589   |
+| ED          | CHASE        | 28 MySQL Boulevard                     | Woodridge                  | QLD                  | Australia                             |              |
+| JENNIFER    | DAVIS        | 23 Workhaven Lane                      | Lethbridge                 | Alberta              | Canada                                | 14033335568  |
+| JOHNNY      | LOLLOBRIGIDA | 1913 Hanoi Way                         | Sasebo                     | Nagasaki             | Japan                                 | 28303384290  |
+| BETTE       | NICHOLSON    | 692 Joliet Street                      | Athenai                    | Attika               | Greece                                | 448477190408 |
+| GRACE       | MOSTEL       | 1121 Loja Avenue                       | San Bernardino             | California           | United States                         | 838635286649 |
+| MATTHEW     | JOHANSSON    | 1566 Inegl Manor                       | Myingyan                   | Mandalay             | Myanmar                               | 705814003527 |
+| JOE         | SWANK        | 1795 Santiago de Compostela Way        | Laredo                     | Texas                | United States                         | 860452626434 |
+| CHRISTIAN   | GABLE        | 53 Idfu Parkway                        | Nantou                     | Nantou               | Taiwan                                | 10655648674  |
+| ZERO        | CAGE         | 900 Santiago de Compostela Parkway     | Kragujevac                 | Central Serbia       | Yugoslavia                            | 716571220373 |
+| KARL        | BERRY        | 613 Korolev Drive                      | Masqat                     | Masqat               | Oman                                  | 380657522649 |
+| UMA         | WOOD         | 1867 San Juan Bautista Tuxtepec Avenue | Ivanovo                    | Ivanovo              | Russian Federation                    | 547003310357 |
+| VIVIEN      | BERGEN       | 262 A Corua (La Corua) Parkway         | Tangail                    | Dhaka                | Bangladesh                            | 892775750063 |
+| CUBA        | OLIVIER      | 334 Munger (Monghyr) Lane              | Arak                       | Markazi              | Iran                                  | 481183273622 |
+| FRED        | COSTNER      | 915 Ponce Place                        | Basel                      | Basel-Stadt          | Switzerland                           | 1395251317   |
+| HELEN       | VOIGHT       | 1947 Poos de Caldas Boulevard          | Chiayi                     | Chiayi               | Taiwan                                | 427454485876 |
+| DAN         | TORN         | 1936 Lapu-Lapu Parkway                 | Deba Habe                  | Bauchi & Gombe       | Nigeria                               | 653436985797 |
+| BOB         | FAWCETT      | 211 Chiayi Drive                       | Etawah                     | Uttar Pradesh        | India                                 | 665993880048 |
+| LUCILLE     | TRACY        | 602 Paarl Street                       | Pavlodar                   | Pavlodar             | Kazakstan                             | 896314772871 |
+| KIRSTEN     | PALTROW      | 1697 Tanauan Lane                      | Pathankot                  | Punjab               | India                                 | 4764773857   |
+| ELVIS       | MARX         | 671 Graz Street                        | Nador                      | Oriental             | Morocco                               | 680768868518 |
+| SANDRA      | KILMER       | 786 Aurora Avenue                      | Shimonoseki                | Yamaguchi            | Japan                                 | 18461860151  |
+| CAMERON     | STREEP       | 1213 Ranchi Parkway                    | Mysore                     | Karnataka            | India                                 | 800024380485 |
+| KEVIN       | BLOOM        | 1214 Hanoi Way                         | Lincoln                    | Nebraska             | United States                         | 491001136577 |
+| RIP         | CRAWFORD     | 1632 Bislig Avenue                     | Pak Kret                   | Nonthaburi           | Thailand                              | 471675840679 |
+| JULIA       | MCQUEEN      | 1447 Imus Way                          | Faaa                       | Tahiti               | French Polynesia                      | 539758313890 |
+| WOODY       | HOFFMAN      | 17 Kabul Boulevard                     | Nagareyama                 | Chiba                | Japan                                 | 697760867968 |
+| ALEC        | WAYNE        | 1124 Buenaventura Drive                | al-Hawiya                  | Mekka                | Saudi Arabia                          | 407733804223 |
+| SANDRA      | PECK         | 492 Cam Ranh Street                    | Baybay                     | Eastern Visayas      | Philippines                           | 565018274456 |
+| SISSY       | SOBIESKI     | 808 Bhopal Manor                       | Yamuna Nagar               | Haryana              | India                                 | 465887807014 |
+| TIM         | HACKMAN      | 1966 Amroha Avenue                     | Daxian                     | Sichuan              | China                                 | 333489324603 |
+| MILLA       | PECK         | 927 Baha Blanca Parkway                | Simferopol                 | Krim                 | Ukraine                               | 821972242086 |
+| AUDREY      | OLIVIER      | 1206 Dos Quebradas Place               | Rio Claro                  | So Paulo             | Brazil                                | 241832790687 |
+| JUDY        | DEAN         | 725 Isesaki Place                      | Jedda                      | Mekka                | Saudi Arabia                          | 876295323994 |
+| BURT        | DUKAKIS      | 33 Gorontalo Way                       | Kamarhati                  | West Bengali         | India                                 | 745994947458 |
+| VAL         | BOLGER       | 57 Arlington Manor                     | Shivapuri                  | Madhya Pradesh       | India                                 | 990214419142 |
+| TOM         | MCKELLEN     | 1780 Hino Boulevard                    | Liepaja                    | Liepaja              | Latvia                                | 902731229323 |
+| GOLDIE      | BRODY        | 1717 Guadalajara Lane                  | Saint Louis                | Missouri             | United States                         | 914090181665 |
+| JOHNNY      | CAGE         | 943 Tokat Street                       | Vaduz                      | Vaduz                | Liechtenstein                         | 889318963672 |
+| JODIE       | DEGENERES    | 269 Cam Ranh Parkway                   | Chisinau                   | Chisinau             | Moldova                               | 489783829737 |
+| TOM         | MIRANDA      | 1551 Rampur Lane                       | Changhwa                   | Changhwa             | Taiwan                                | 251164340471 |
+| KIRK        | JOVOVICH     | 1688 Okara Way                         | Mardan                     | Nothwest Border Prov | Pakistan                              | 144453869132 |
+| NICK        | STALLONE     | 832 Nakhon Sawan Manor                 | Zalantun                   | Inner Mongolia       | China                                 | 275595571388 |
+| REESE       | KILMER       | 1308 Arecibo Way                       | Augusta-Richmond County    | Georgia              | United States                         | 6171054059   |
+| PARKER      | GOLDBERG     | 264 Bhimavaram Manor                   | Charlotte Amalie           | St Thomas            | Virgin Islands, U.S.                  | 302526949177 |
+| JULIA       | BARRYMORE    | 1913 Kamakura Place                    | Jelets                     | Lipetsk              | Russian Federation                    | 942570536750 |
+| FRANCES     | DAY-LEWIS    | 1386 Yangor Avenue                     | Toulon                     | Provence-Alpes-Cte   | France                                | 449216226468 |
+| ANNE        | CRONYN       | 848 Tafuna Manor                       | Ktahya                     | Ktahya               | Turkey                                | 614935229095 |
+| NATALIE     | HOPKINS      | 115 Hidalgo Parkway                    | Omdurman                   | Khartum              | Sudan                                 | 307703950263 |
+| GARY        | PHOENIX      | 1074 Binzhou Manor                     | Mannheim                   | Baden-Wrttemberg     | Germany                               | 331132568928 |
+| CARMEN      | HUNT         | 798 Cianjur Avenue                     | Yuncheng                   | Shanxi               | China                                 | 499408708580 |
+| MENA        | TEMPLE       | 781 Shimonoseki Drive                  | Hidalgo                    | Michoacn de Ocampo   | Mexico                                | 632316273199 |
+| PENELOPE    | PINKETT      | 1792 Valle de la Pascua Place          | Siegen                     | Nordrhein-Westfalen  | Germany                               | 419419591240 |
+| FAY         | KILMER       | 419 Iligan Lane                        | Bhopal                     | Madhya Pradesh       | India                                 | 990911107354 |
+| DAN         | HARRIS       | 1427 A Corua (La Corua) Place          | Baha Blanca                | Buenos Aires         | Argentina                             | 972574862516 |
+| JUDE        | CRUISE       | 241 Mosul Lane                         | Dos Quebradas              | Risaralda            | Colombia                              | 765345144779 |
+| CHRISTIAN   | AKROYD       | 1967 Sincelejo Place                   | Gandhinagar                | Gujarat              | India                                 | 577812616052 |
+| DUSTIN      | TAUTOU       | 1107 Nakhon Sawan Avenue               | Nezahualcyotl              | Mxico                | Mexico                                | 867546627903 |
+| HENRY       | BERRY        | 140 Chiayi Parkway                     | Sumy                       | Sumy                 | Ukraine                               | 855863906434 |
+| CHRISTIAN   | NEESON       | 682 Garden Grove Place                 | Memphis                    | Tennessee            | United States                         | 72136330362  |
+| JAYNE       | NEESON       | 1157 Nyeri Loop                        | Maikop                     | Adygea               | Russian Federation                    | 262744791493 |
+| CAMERON     | WRAY         | 1752 So Leopoldo Parkway               | Mukateve                   | Taka-Karpatia        | Ukraine                               | 252265130067 |
+| RAY         | JOHANSSON    | 782 Mosul Street                       | Brockton                   | Massachusetts        | United States                         | 885899703621 |
+| ANGELA      | HUDSON       | 588 Vila Velha Manor                   | Kimchon                    | Kyongsangbuk         | South Korea                           | 333339908719 |
+| MARY        | TANDY        | 1001 Miyakonojo Lane                   | Taizz                      | Taizz                | Yemen                                 | 584316724815 |
+| JESSICA     | BAILEY       | 42 Brindisi Place                      | Yerevan                    | Yerevan              | Armenia                               | 42384721397  |
+| RIP         | WINSLET      | 1027 Songkhla Manor                    | Molodetno                  | Minsk                | Belarus                               | 563660187896 |
+| KENNETH     | PALTROW      | 1410 Benin City Parkway                | Pereira                    | Risaralda            | Colombia                              | 104150372603 |
+| MICHELLE    | MCCONAUGHEY  | 1158 Mandi Bahauddin Parkway           | Datong                     | Shanxi               | China                                 | 276555730211 |
+| ADAM        | GRANT        | 752 Ondo Loop                          | Miyakonojo                 | Miyazaki             | Japan                                 | 134673576619 |
+| SEAN        | WILLIAMS     | 1309 Weifang Street                    | Tallahassee                | Florida              | United States                         | 435785045362 |
+| GARY        | PENN         | 316 Uruapan Street                     | Ipoh                       | Perak                | Malaysia                              | 275788967899 |
+| MILLA       | KEITEL       | 456 Escobar Way                        | Jakarta                    | Jakarta Raya         | Indonesia                             | 719202533520 |
+| BURT        | POSEY        | 1749 Daxian Place                      | Apeldoorn                  | Gelderland           | Netherlands                           | 963369996279 |
+| ANGELINA    | ASTAIRE      | 804 Elista Drive                       | Enshi                      | Hubei                | China                                 | 379804592943 |
+| CARY        | MCCONAUGHEY  | 543 Bergamo Avenue                     | Ibirit                     | Minas Gerais         | Brazil                                | 103602195112 |
+| GROUCHO     | SINATRA      | 1002 Ahmadnagar Manor                  | Huixquilucan               | Mxico                | Mexico                                | 371490777743 |
+| MAE         | HOFFMAN      | 682 Junan Way                          | Klerksdorp                 | North West           | South Africa                          | 622255216127 |
+| RALPH       | CRUZ         | 1050 Garden Grove Avenue               | Jastrzebie-Zdrj            | Slaskie              | Poland                                | 973047364353 |
+| SCARLETT    | DAMON        | 1987 Coacalco de Berriozbal Loop       | Shubra al-Khayma           | al-Qalyubiya         | Egypt                                 | 787654415858 |
+| WOODY       | JOLIE        | 801 Hagonoy Drive                      | Smolensk                   | Smolensk             | Russian Federation                    | 237426099212 |
+| BEN         | WILLIS       | 1089 Iwatsuki Avenue                   | Kirovo-Tepetsk             | Kirov                | Russian Federation                    | 866092335135 |
+| JAMES       | PITT         | 765 Southampton Drive                  | Qalyub                     | al-Qalyubiya         | Egypt                                 | 23712411567  |
+| MINNIE      | ZELLWEGER    | 1540 Wroclaw Drive                     | Chandrapur                 | Maharashtra          | India                                 | 182363341674 |
+| GREG        | CHAPLIN      | 1079 Tel Aviv-Jaffa Boulevard          | Cuman                      | Sucre                | Venezuela                             | 358178933857 |
+| SPENCER     | PECK         | 954 Kimchon Place                      | Uttarpara-Kotrung          | West Bengali         | India                                 | 541327526474 |
+| KENNETH     | PESCI        | 43 Dadu Avenue                         | Bhilwara                   | Rajasthan            | India                                 | 95666951770  |
+| CHARLIZE    | DENCH        | 660 Jedda Boulevard                    | Bellevue                   | Washington           | United States                         | 168758068397 |
+| SEAN        | GUINESS      | 817 Bradford Loop                      | Changzhou                  | Jiangsu              | China                                 | 264286442804 |
+| CHRISTOPHER | BERRY        | 442 Rae Bareli Place                   | Duisburg                   | Nordrhein-Westfalen  | Germany                               | 886636413768 |
+| KIRSTEN     | AKROYD       | 146 Johannesburg Way                   | Matamoros                  | Tamaulipas           | Mexico                                | 953689007081 |
+| ELLEN       | PRESLEY      | 1229 Valencia Parkway                  | Stara Zagora               | Haskovo              | Bulgaria                              | 352679173732 |
+| KENNETH     | TORN         | 1029 Dzerzinsk Manor                   | Touliu                     | Ynlin                | Taiwan                                | 33173584456  |
+| DARYL       | WAHLBERG     | 1666 Beni-Mellal Place                 | Clarksville                | Tennessee            | United States                         | 9099941466   |
+| GENE        | WILLIS       | 1839 Szkesfehrvr Parkway               | Luzinia                    | Gois                 | Brazil                                | 947468818183 |
+| MEG         | HAWKE        | 1848 Salala Boulevard                  | Ocumare del Tuy            | Miranda              | Venezuela                             | 48265851133  |
+| CHRIS       | BRIDGES      | 793 Cam Ranh Avenue                    | Lancaster                  | California           | United States                         | 824370924746 |
+| JIM         | MOSTEL       | 1386 Nakhon Sawan Boulevard            | Pyongyang                  | Pyongyang-si         | North Korea                           | 368899174225 |
+| SPENCER     | DEPP         | 1587 Sullana Lane                      | Hohhot                     | Inner Mongolia       | China                                 | 468060467018 |
+| SUSAN       | DAVIS        | 1964 Gijn Manor                        | Shimoga                    | Karnataka            | India                                 | 918119601885 |
+| WALTER      | TORN         | 1294 Firozabad Drive                   | Pingxiang                  | Jiangxi              | China                                 | 161801569569 |
+| MATTHEW     | LEIGH        | 261 Saint Louis Way                    | Torren                     | Coahuila de Zaragoza | Mexico                                | 321944036800 |
+| PENELOPE    | CRONYN       | 842 Salzburg Lane                      | Tarsus                     | Adana                | Turkey                                | 697151428760 |
+| SIDNEY      | CROWE        | 533 al-Ayn Boulevard                   | Compton                    | California           | United States                         | 662227486184 |
+| GROUCHO     | DUNST        | 447 Surakarta Loop                     | Kisumu                     | Nyanza               | Kenya                                 | 940830176580 |
+| GINA        | DEGENERES    | 154 Tallahassee Loop                   | Hami                       | Xinxiang             | China                                 | 935508855935 |
+| WARREN      | NOLTE        | 698 Otsu Street                        | Cayenne                    | Cayenne              | French Guiana                         | 409983924481 |
+| SYLVESTER   | DERN         | 1010 Klerksdorp Way                    | Graz                       | Steiermark           | Austria                               | 493008546874 |
+| SUSAN       | DAVIS        | 741 Ambattur Manor                     | s-Hertogenbosch            | Noord-Brabant        | Netherlands                           | 302590383819 |
+| CAMERON     | ZELLWEGER    | 1854 Tieli Street                      | Liaocheng                  | Shandong             | China                                 | 509492324775 |
+| RUSSELL     | BACALL       | 333 Goinia Way                         | Grand Prairie              | Texas                | United States                         | 909029256431 |
+| MORGAN      | HOPKINS      | 1532 Dzerzinsk Way                     | Merlo                      | Buenos Aires         | Argentina                             | 330838016880 |
+| MORGAN      | MCDORMAND    | 850 Salala Loop                        | Nuuk                       | Kitaa                | Greenland                             | 403404780639 |
+| HARRISON    | BALE         | 356 Olomouc Manor                      | Anpolis                    | Gois                 | Brazil                                | 22326410776  |
+| DAN         | STREEP       | 226 Halifax Street                     | Korla                      | Xinxiang             | China                                 | 790651020929 |
+| RENEE       | TRACY        | 85 San Felipe de Puerto Plata Drive    | Yantai                     | Shandong             | China                                 | 170739645687 |
+| CUBA        | ALLEN        | 1736 Cavite Place                      | Idfu                       | Qina                 | Egypt                                 | 431770603551 |
+| WARREN      | JACKMAN      | 446 Kirovo-Tepetsk Lane                | Higashiosaka               | Osaka                | Japan                                 | 303967439816 |
+| PENELOPE    | MONROE       | 1192 Tongliao Street                   | Sharja                     | Sharja               | United Arab Emirates                  | 350970907017 |
+| LIZA        | BERGMAN      | 1308 Sumy Loop                         | Fuzhou                     | Fujian               | China                                 | 583021225407 |
+| SALMA       | NOLTE        | 1831 Nam Dinh Loop                     | Mandaluyong                | National Capital Reg | Philippines                           | 322888976727 |
+| JULIANNE    | DENCH        | 647 A Corua (La Corua) Street          | Naju                       | Chollanam            | South Korea                           | 792557457753 |
+| SCARLETT    | BENING       | 47 Syktyvkar Lane                      | Ciomas                     | West Java            | Indonesia                             | 63937119031  |
+| ALBERT      | NOLTE        | 1944 Bamenda Way                       | Warren                     | Michigan             | United States                         | 75975221996  |
+| FRANCES     | TOMEI        | 226 Brest Manor                        | Sunnyvale                  | California           | United States                         | 785881412500 |
+| KEVIN       | GARLAND      | 457 Tongliao Loop                      | Inegl                      | Bursa                | Turkey                                | 880756161823 |
+| CATE        | MCQUEEN      | 346 Skikda Parkway                     | Jalib al-Shuyukh           | Hawalli              | Kuwait                                | 630424482919 |
+| DARYL       | CRAWFORD     | 1215 Pyongyang Parkway                 | Usak                       | Usak                 | Turkey                                | 646237101779 |
+| GRETA       | KEITEL       | 387 Mwene-Ditu Drive                   | Ashgabat                   | Ahal                 | Turkmenistan                          | 764477681869 |
+| JANE        | JACKMAN      | 751 Lima Loop                          | Aden                       | Aden                 | Yemen                                 | 756460337785 |
+| ADAM        | HOPPER       | 1842 Luzinia Boulevard                 | Zanzibar                   | Zanzibar West        | Tanzania                              | 706878974831 |
+| RICHARD     | PENN         | 1168 Najafabad Parkway                 | Kabul                      | Kabol                | Afghanistan                           | 886649065861 |
+| GENE        | HOPKINS      | 1473 Changhwa Parkway                  | Coacalco de Berriozbal     | Mxico                | Mexico                                | 266798132374 |
+| RITA        | REYNOLDS     | 829 Grand Prairie Way                  | Maring                     | Paran                | Brazil                                | 741070712873 |
+| ED          | MANSFIELD    | 1497 Yuzhou Drive                      | London                     | England              | United Kingdom                        | 246810237916 |
+| MORGAN      | WILLIAMS     | 1103 Bilbays Parkway                   | Xiangfan                   | Hubei                | China                                 | 279979529227 |
+| LUCILLE     | DEE          | 430 Alessandria Loop                   | Saarbrcken                 | Saarland             | Germany                               | 669828224459 |
+| EWAN        | GOODING      | 1926 Gingoog Street                    | Syrakusa                   | Sisilia              | Italy                                 | 469738825391 |
+| WHOOPI      | HURT         | 1256 Bislig Boulevard                  | Botosani                   | Botosani             | Romania                               | 479007229460 |
+| CATE        | HARRIS       | 1304 s-Hertogenbosch Way               | Blumenau                   | Santa Catarina       | Brazil                                | 90336226227  |
+| JADA        | RYDER        | 885 Yingkou Manor                      | Zaria                      | Kaduna               | Nigeria                               | 588964509072 |
+| RIVER       | DEAN         | 176 Mandaluyong Place                  | Jhansi                     | Uttar Pradesh        | India                                 | 627705991774 |
+| ANGELA      | WITHERSPOON  | 81 Hodeida Way                         | Jaipur                     | Rajasthan            | India                                 | 250767749542 |
+| KIM         | ALLEN        | 1027 Banjul Place                      | Halisahar                  | West Bengali         | India                                 | 538241037443 |
+| ALBERT      | JOHANSSON    | 898 Belm Manor                         | Botshabelo                 | Free State           | South Africa                          | 707169393853 |
+| FAY         | WINSLET      | 1201 Qomsheh Manor                     | Aparecida de Goinia        | Gois                 | Brazil                                | 873492228462 |
+| EMILY       | DEE          | 1679 Antofagasta Street                | Ciudad del Este            | Alto Paran           | Paraguay                              | 905903574913 |
+| RUSSELL     | TEMPLE       | 1191 Sungai Petani Boulevard           | Kansas City                | Missouri             | United States                         | 983259819766 |
+| JAYNE       | NOLTE        | 68 Ponce Parkway                       | Hanoi                      | Hanoi                | Vietnam                               | 870635127812 |
+| GEOFFREY    | HESTON       | 1892 Nabereznyje Telny Lane            | Tafuna                     | Tutuila              | American Samoa                        | 478229987054 |
+| BEN         | HARRIS       | 715 So Bernardo do Campo Lane          | Sungai Petani              | Kedah                | Malaysia                              | 181179321332 |
+| MINNIE      | KILMER       | 430 Kumbakonam Drive                   | Santa F                    | Santa F              | Argentina                             | 105470691550 |
+| MERYL       | GIBSON       | 1838 Tabriz Lane                       | Dhaka                      | Dhaka                | Bangladesh                            | 38988715447  |
+| IAN         | TANDY        | 1145 Vilnius Manor                     | San Felipe del Progreso    | Mxico                | Mexico                                | 674805712553 |
+| FAY         | WOOD         | 1635 Kuwana Boulevard                  | Hiroshima                  | Hiroshima            | Japan                                 | 710603868323 |
+| GRETA       | MALDEN       | 469 Nakhon Sawan Street                | Teboksary                  | Tuvassia             | Russian Federation                    | 689199636560 |
+| VIVIEN      | BASINGER     | 1009 Zanzibar Lane                     | Arecibo                    | Arecibo              | Puerto Rico                           | 102396298916 |
+| LAURA       | BRODY        | 114 Jalib al-Shuyukh Manor             | Yaound                     | Centre               | Cameroon                              | 845378657301 |
+| CHRIS       | DEPP         | 154 Oshawa Manor                       | Probolinggo                | East Java            | Indonesia                             | 440365973660 |
+| HARVEY      | HOPE         | 1049 Matamoros Parkway                 | Gulbarga                   | Karnataka            | India                                 | 960505250340 |
+| OPRAH       | KILMER       | 1641 Changhwa Place                    | Bamenda                    | Nord-Ouest           | Cameroon                              | 256546485220 |
+| CHRISTOPHER | WEST         | 368 Hunuco Boulevard                   | Namibe                     | Namibe               | Angola                                | 106439158941 |
+| HUMPHREY    | WILLIS       | 401 Sucre Boulevard                    | Manchester                 | New Hampshire        | United States                         | 486395999608 |
+| AL          | GARLAND      | 1368 Maracabo Boulevard                | South Hill                 |                      | Anguilla                              | 934352415130 |
+| NICK        | DEGENERES    | 913 Coacalco de Berriozbal Loop        | Arlington                  | Texas                | United States                         | 262088367001 |
+| LAURENCE    | BULLOCK      | 1224 Huejutla de Reyes Boulevard       | Brescia                    | Lombardia            | Italy                                 | 806016930576 |
+| WILL        | WILSON       | 1860 Taguig Loop                       | Ciparay                    | West Java            | Indonesia                             | 38158430589  |
+| KENNETH     | HOFFMAN      | 898 Jining Lane                        | Oulu                       | Pohjois-Pohjanmaa    | Finland                               | 161643343536 |
+| MENA        | HOPPER       | 780 Kimberley Way                      | Tabuk                      | Tabuk                | Saudi Arabia                          | 824396883951 |
+| OLYMPIA     | PFEIFFER     | 1912 Emeishan Drive                    | Balikesir                  | Balikesir            | Turkey                                | 99883471275  |
+| GROUCHO     | WILLIAMS     | 1698 Southport Loop                    | Pachuca de Soto            | Hidalgo              | Mexico                                | 754358349853 |
+| ALAN        | DREYFUSS     | 817 Laredo Avenue                      | Guadalajara                | Jalisco              | Mexico                                | 151249681135 |
+| MICHAEL     | BENING       | 1658 Jastrzebie-Zdrj Loop              | Nyeri                      | Central              | Kenya                                 | 568367775448 |
+| WILLIAM     | HACKMAN      | 614 Pak Kret Street                    | Addis Abeba                | Addis Abeba          | Ethiopia                              | 47808359842  |
+| JON         | CHASE        | 661 Chisinau Lane                      | Kolpino                    | Pietari              | Russian Federation                    | 816436065431 |
+| GENE        | MCKELLEN     | 41 El Alto Parkway                     | Parbhani                   | Maharashtra          | India                                 | 51917807050  |
+| LISA        | MONROE       | 519 Nyeri Manor                        | Santo Andr                 | So Paulo             | Brazil                                | 764680915323 |
+| ED          | GUINESS      | 381 Kabul Way                          | Hsichuh                    | Taipei               | Taiwan                                | 55477302294  |
+| JEFF        | SILVERSTONE  | 687 Alessandria Parkway                | Sanaa                      | Sanaa                | Yemen                                 | 407218522294 |
+| MATTHEW     | CARREY       | 1519 Santiago de los Caballeros Loop   | Mwene-Ditu                 | East Kasai           | Congo, The Democratic Republic of the | 409315295763 |
+| DEBBIE      | AKROYD       | 1957 Yantai Lane                       | Sorocaba                   | So Paulo             | Brazil                                | 704948322302 |
+| RUSSELL     | CLOSE        | 651 Pathankot Loop                     | Miraj                      | Maharashtra          | India                                 | 139378397418 |
+| HUMPHREY    | GARLAND      | 1354 Siegen Street                     | Angra dos Reis             | Rio de Janeiro       | Brazil                                | 573441801529 |
+| MICHAEL     | BOLGER       | 1599 Plock Drive                       | Tete                       | Tete                 | Mozambique                            | 817248913162 |
+| JULIA       | ZELLWEGER    | 951 Stara Zagora Manor                 | Patiala                    | Punjab               | India                                 | 429925609431 |
+| RENEE       | BALL         | 1908 Gaziantep Place                   | Tiefa                      | Liaoning             | China                                 | 108053751300 |
+| ROCK        | DUKAKIS      | 230 Urawa Drive                        | Adoni                      | Andhra Pradesh       | India                                 | 166898395731 |
+| CUBA        | BIRCH        | 1920 Weifang Avenue                    | Rampur                     | Uttar Pradesh        | India                                 | 869507847714 |
+| AUDREY      | BAILEY       | 532 Toulon Street                      | Santiago de los Caballeros | Santiago             | Dominican Republic                    | 46871694740  |
+| GREGORY     | GOODING      | 503 Sogamoso Loop                      | Sumqayit                   | Sumqayit             | Azerbaijan                            | 834626715837 |
+| JOHN        | SUVARI       | 604 Bern Place                         | Ranchi                     | Jharkhand            | India                                 | 620719383725 |
+| BURT        | TEMPLE       | 98 Stara Zagora Boulevard              | Buenaventura               | Valle                | Colombia                              | 610173756082 |
+| MERYL       | ALLEN        | 1479 Rustenburg Boulevard              | Tanza                      | Southern Tagalog     | Philippines                           | 727785483194 |
+| JAYNE       | SILVERSTONE  | 1293 Nam Dinh Way                      | Boa Vista                  | Roraima              | Brazil                                | 697656479977 |
+| BELA        | WALKEN       | 1628 Nagareyama Lane                   | San Lorenzo                | Central              | Paraguay                              | 20194292617  |
+| REESE       | WEST         | 619 Hunuco Avenue                      | Matsue                     | Shimane              | Japan                                 | 142596392389 |
+| MARY        | KEITEL       | 127 Iwakuni Boulevard                  | Hagonoy                    | Central Luzon        | Philippines                           | 987442542471 |
+| JULIA       | FAWCETT      | 45 Aparecida de Goinia Place           | Satna                      | Madhya Pradesh       | India                                 | 650496654258 |
+| THORA       | TEMPLE       | 168 Cianjur Manor                      | Iwatsuki                   | Saitama              | Japan                                 | 679095087143 |
+| AYUSH       | RANA         | 780 Kimberley Way                      | Tabuk                      | Tabuk                | Saudi Arabia                          | 824396883951 |
++-------------+--------------+----------------------------------------+----------------------------+----------------------+---------------------------------------+--------------+
+201 rows in set (0.00 sec)
+
+mysql>
+
+
+
