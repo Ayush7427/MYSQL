@@ -1,0 +1,110 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| classicmodels      |
+| information_schema |
+| lco_films          |
+| movies_db_pw       |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql> use  movies_db_pw;
+Database changed
+mysql> show tables;
++------------------------+
+| Tables_in_movies_db_pw |
++------------------------+
+| actors                 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from actors;
++----------+-----------+--------+----------+
+| Name     | Lastname  | Gender | Networth |
++----------+-----------+--------+----------+
+| Chris    | Hemsworth | Male   |      915 |
+| Scarlett | Johnson   | Female |      500 |
+| Chris    | Evans     | Male   |      700 |
+| Paul     | Rudd      | Male   |      150 |
+| Brie     | Larson    | Female |      650 |
+| Chadwick | Boseman   | Male   |      500 |
++----------+-----------+--------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from actors WHERE Networth = 500;
++----------+----------+--------+----------+
+| Name     | Lastname | Gender | Networth |
++----------+----------+--------+----------+
+| Scarlett | Johnson  | Female |      500 |
+| Chadwick | Boseman  | Male   |      500 |
++----------+----------+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from actors WHERE Networth = 500  ORDER BY Name;
++----------+----------+--------+----------+
+| Name     | Lastname | Gender | Networth |
++----------+----------+--------+----------+
+| Chadwick | Boseman  | Male   |      500 |
+| Scarlett | Johnson  | Female |      500 |
++----------+----------+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from actors WHERE Networth = 500  ORDER BY Name LIMIT 1;
++----------+----------+--------+----------+
+| Name     | Lastname | Gender | Networth |
++----------+----------+--------+----------+
+| Chadwick | Boseman  | Male   |      500 |
++----------+----------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from actors WHERE Networth = 500  ORDER BY Name LIMIT 1 OFFSET 0;
++----------+----------+--------+----------+
+| Name     | Lastname | Gender | Networth |
++----------+----------+--------+----------+
+| Chadwick | Boseman  | Male   |      500 |
++----------+----------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from actors WHERE Networth = 500  ORDER BY Name LIMIT 1 OFFSET 1;
++----------+----------+--------+----------+
+| Name     | Lastname | Gender | Networth |
++----------+----------+--------+----------+
+| Scarlett | Johnson  | Female |      500 |
++----------+----------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql> UPDATE actors SET Networth = 515 WHERE Name = "Scarlett" ;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from actors WHERE Networth = 500 AND Networth < 600  ORDER BY Name LIMIT 1 OFFSET 1;
+Empty set (0.00 sec)
+
+mysql> select * from actors WHERE Networth >= 500 AND Networth < 600  ORDER BY Name LIMIT 1 OFFSET 1;
++----------+----------+--------+----------+
+| Name     | Lastname | Gender | Networth |
++----------+----------+--------+----------+
+| Scarlett | Johnson  | Female |      515 |
++----------+----------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from actors;
++----------+-----------+--------+----------+
+| Name     | Lastname  | Gender | Networth |
++----------+-----------+--------+----------+
+| Chris    | Hemsworth | Male   |      915 |
+| Scarlett | Johnson   | Female |      515 |
+| Chris    | Evans     | Male   |      700 |
+| Paul     | Rudd      | Male   |      150 |
+| Brie     | Larson    | Female |      650 |
+| Chadwick | Boseman   | Male   |      500 |
++----------+-----------+--------+----------+
+6 rows in set (0.00 sec)
+
+mysql>
